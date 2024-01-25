@@ -1,3 +1,4 @@
+# Death Office
 
 Data Exploration and Analysis
 ===
@@ -13,8 +14,7 @@ It contains the death records of the United States from 2005 to 2015\
 ## Technologies
 - Python
 - Spark
-- Kafka
-- Apache HUE
+- Matplotlib
 
 ## Collaborators
 - Samuel Guillemet
