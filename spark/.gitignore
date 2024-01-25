@@ -1,0 +1,11 @@
+.bloop/
+.metals/
+spark-*/
+project/
+target/
+*.csv/
+.scalafmt.conf
+data/*
+!data/.gitkeep
+input/*
+!input/.gitkeep
