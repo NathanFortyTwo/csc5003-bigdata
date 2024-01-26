@@ -41,4 +41,5 @@ ax.set_title("Stacked Bar Chart - month_of_death vs. Manner of Death")
 # Show the plot
 plt.tight_layout()
 plt.xticks(rotation=30, ha="right")
+plt.show()
 plt.savefig("./img/month_of_death.png")

@@ -74,7 +74,7 @@ def cause(f):
         causes.append(line[0])
         table.append([line[0], get_true_value(header[0], line[0])])
         deaths.append(count)
-    print(tabulate(table, headers=["Code", "Cause"], tablefmt="github"))
+    # print(tabulate(table, headers=["Code", "Cause"], tablefmt="github"))
     plt.bar(causes, deaths, width=0.7)
 
 

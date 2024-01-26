@@ -22,7 +22,7 @@ def get_true_value(encoded_value):
 file_path = "./data/mannerOfDeathByMaritalStatus.csv"
 df = pd.read_csv(file_path)
 
-ZCOL_NAME = "manner_of_death"
+COL_NAME = "manner_of_death"
 df["manner_of_death"] = df["manner_of_death"].apply(get_true_value)
 COL_NAME = "marital_status"
 df["marital_status"] = df["marital_status"].apply(get_true_value)

@@ -4,4 +4,4 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-convert -resize 70% -delay 200 -loop 0 $1/*.png $2
+convert -resize 80% -delay 150 -loop 0 $1/*.png $2
