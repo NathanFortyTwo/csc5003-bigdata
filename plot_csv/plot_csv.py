@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import json
-
-JSON_PATH = "/mnt/d/csc5003data/2005_codes.json"
+from tabulate import tabulate
 
 
 def deco(filename):
@@ -13,6 +12,7 @@ def deco(filename):
                 func(f)
             plt.xticks(rotation=30, ha="right")
             plt.title(func.__doc__)
+            plt.tight_layout()
             plt.savefig(save_path)
             plt.clf()
 
@@ -22,6 +22,8 @@ def deco(filename):
 
 
 def get_true_value(col_name, encoded_value):
+    JSON_PATH = "/mnt/d/csc5003data/2005_codes.json"
+
     with open(JSON_PATH) as f:
         json_file = json.load(f)
         return json_file[col_name].get(encoded_value)
@@ -65,19 +67,15 @@ def cause(f):
     header = f.readline().split(",")
     causes = []
     deaths = []
+    table = []
     for line in f:
         line = line.strip().split(",")
-        cause = get_true_value(header[0], line[0])
-        cause = cause.split("(")[0]
         count = int(line[1])
-        causes.append(cause)
+        causes.append(line[0])
+        table.append([line[0], get_true_value(header[0], line[0])])
         deaths.append(count)
+    print(tabulate(table, headers=["Code", "Cause"], tablefmt="github"))
     plt.bar(causes, deaths, width=0.7)
-
-
-@deco("causeRecodeByMonth")
-def cause_month(f):
-    pass
 
 
 def education():
@@ -105,18 +103,100 @@ def education():
             figid += 1
             plt.title(education)
             plt.xticks(rotation=25, ha="right")
+            plt.tight_layout()
 
             plt.savefig("./img/education/" + education + ".png")
+            plt.clf()
 
 
-@deco("mannerOfDeathByDay")
-def manner_by_day(f):
-    pass
+def educationV2():
+    with open("./data/educationPercentage.csv") as f:
+        header = f.readline().split(",")
+        percentages = []
+        _all = dict()
+        for line in f:
+            line = line.strip().split(",")
+            education = get_true_value(header[0], line[0])
+            manner = get_true_value(header[1], line[1])
+            percentage = float(line[-1])
+            if not education or not manner:
+                continue
+
+            if not manner in _all:
+                _all[manner] = ([], [])
+            _all[manner][0].append(education)
+            _all[manner][1].append(percentage)
+
+        figid = 0
+        for manners, (education, percentages) in _all.items():
+            plt.figure(figid)
+            plt.bar(education, percentages)
+            figid += 1
+            plt.title(manners)
+            plt.xticks(rotation=25, ha="right")
+            plt.tight_layout()
+            plt.savefig("./img/manners/" + manners + ".png")
+            plt.clf()
 
 
-@deco("mannerOfDeathByMaritalStatus")
-def manner_by_marital(f):
-    pass
+def manner_by_day():
+    with open("./data/mannerOfDeathByDay.csv") as f:
+        header = f.readline().split(",")
+        percentages = []
+        _all = dict()
+        for line in f:
+            line = line.strip().split(",")
+            day = get_true_value(header[0], line[0])
+            manner = get_true_value(header[1], line[1])
+            percentage = float(line[-1])
+            if not day or not manner:
+                continue
+
+            if not manner in _all:
+                _all[manner] = ([], [])
+            _all[manner][0].append(day)
+            _all[manner][1].append(percentage)
+
+        figid = 0
+        for manners, (day, percentages) in _all.items():
+            plt.figure(figid)
+            plt.bar(day, percentages)
+            figid += 1
+            plt.title(manners)
+            plt.xticks(rotation=25, ha="right")
+            plt.tight_layout()
+            plt.savefig("./img/manners_day/" + manners + ".png")
+            plt.clf()
+
+
+def manner_by_marital():
+    with open("./data/mannerOfDeathByMaritalStatus.csv") as f:
+        header = f.readline().split(",")
+        percentages = []
+        _all = dict()
+        for line in f:
+            line = line.strip().split(",")
+            status = get_true_value(header[0], line[0])
+            manner = get_true_value(header[1], line[1])
+            percentage = float(line[-1])
+            if not status or not manner:
+                continue
+
+            if not manner in _all:
+                _all[manner] = ([], [])
+            _all[manner][0].append(status)
+            _all[manner][1].append(percentage)
+
+        figid = 0
+        for status, (manner, percentages) in _all.items():
+            plt.figure(figid)
+            plt.bar(manner, percentages)
+            figid += 1
+            plt.title(status)
+            plt.xticks(rotation=25, ha="right")
+            plt.tight_layout()
+            plt.savefig("./img/marital_status/" + status + ".png")
+            plt.clf()
 
 
 @deco("racePercentage")
@@ -140,11 +220,12 @@ def main():
     age()
     autopsy()
     cause()
-    cause_month()
     education()
     manner_by_day()
     manner_by_marital()
     race()
+    educationV2()
 
 
-main()
+if __name__ == "__main__":
+    main()
